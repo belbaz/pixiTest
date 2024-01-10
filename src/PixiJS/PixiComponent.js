@@ -6,7 +6,6 @@ import "./style.css"
 const PixiComponent = () => {
     const pixiContainer = useRef(null);
     let keys = {};
-
     const onKeyDown = (e) => {
         keys[e.keyCode] = true;
     };
@@ -17,28 +16,32 @@ const PixiComponent = () => {
 
     useEffect(() => {
         // Set up Pixi.js
-        const renderer = PIXI.autoDetectRenderer();
+        const renderer = PIXI.autoDetectRenderer({ backgroundColor: 0xFFFFFF  }); // Changer la couleur de fond ici
         pixiContainer.current.innerHTML = ""; // Clear the container
         pixiContainer.current.appendChild(renderer.view);
         // Create a container for the scene and the blue border
         const sceneContainer = new PIXI.Container();
+        // const backgroundTexture = PIXI.Texture.from('background.png');
+        // const background = new PIXI.Sprite(backgroundTexture);
+        // background.width = renderer.width;
+        // background.height = renderer.height;
+        // sceneContainer.addChild(background);
         const blueBorder = new PIXI.Graphics();
         blueBorder.lineStyle(15, 0x0000FF); // Line style: 5 pixels width, blue color
         blueBorder.drawRect(0, 0, renderer.width, renderer.height); // Draw a rectangle around the scene
-
-        // Add the blue border to the scene container
         sceneContainer.addChild(blueBorder);
         // Create the stage
         const stage = new PIXI.Container();
         // Load the textures for the "player"
         const characterTextures = {
-            up: PIXI.Texture.from('character_up.png'),
-            down: PIXI.Texture.from('character_down.png'),
-            left: PIXI.Texture.from('character_right.png'),
-            right: PIXI.Texture.from('character_right.png')
+            up: PIXI.Texture.from('character/character_up.png'),
+            down: [PIXI.Texture.from('character/character_down1.png'), PIXI.Texture.from('character/character_down2.png'), PIXI.Texture.from('character/character_down3.png')
+                , PIXI.Texture.from('character/character_down4.png'), PIXI.Texture.from('character/character_down5.png'), PIXI.Texture.from('character/character_down6.png')],
+            left: PIXI.Texture.from('character/character_right1.png'),
+            right: [PIXI.Texture.from('character/character_right1.png'), PIXI.Texture.from('character/character_right2.png'), PIXI.Texture.from('character/character_right3.png')],
         };
         // Create the "player" using the texture
-        const playerBox = new PIXI.Sprite(characterTextures.down);
+        const playerBox = new PIXI.Sprite(characterTextures.down[0]);
         playerBox.anchor.set(0.5); // Centre l'origine du sprite
         playerBox.position.set(renderer.width / 2, renderer.height / 2); // Positionnez le sprite au centre de la scène
         // Load the texture for the "house"
@@ -65,6 +68,9 @@ const PixiComponent = () => {
         stage.addChild(playerBox);
         stage.addChild(houseBox);
         animate();
+
+        let rightStepCounter = 0;
+        let downStepCounter = 0;
         function animate() {
             // Render the stage
             renderer.render(stage);
@@ -78,26 +84,30 @@ const PixiComponent = () => {
                 // If the player is not close to the house, hide the prompt
                 promptText.visible = false;
             }
-            // Vérifiez quelles touches sont enfoncées et déplacez le personnage en conséquence
-            if (keys[37] && playerBox.position.x - 5 > 0) { // gauche
-                playerBox.position.x -= 5;
-                playerBox.texture = characterTextures.left;
+            // Modifiez la partie du code qui gère le mouvement vers la gauche comme suit :
+            if (keys[37] && playerBox.position.x - 3 > 0) { // gauche
+                playerBox.position.x -= 3;
+                playerBox.texture = characterTextures.right[rightStepCounter % 3];
                 playerBox.scale.x = -1;
+                rightStepCounter++;
             }
             if (keys[38] && playerBox.position.y - 5 > 0) { // haut
-                playerBox.position.y -= 5;
+                playerBox.position.y -= 3;
                 playerBox.texture = characterTextures.up;
                 playerBox.scale.x = 1;
             }
+            // Modifiez la partie du code qui gère le mouvement vers la droite comme suit :
             if (keys[39] && playerBox.position.x + 5 < renderer.width) { // droite
-                playerBox.position.x += 5;
-                playerBox.texture = characterTextures.right;
+                playerBox.position.x += 3;
+                playerBox.texture = characterTextures.right[rightStepCounter % 3];
                 playerBox.scale.x = 1;
+                rightStepCounter++;
             }
             if (keys[40] && playerBox.position.y + 5 < renderer.height) { // bas
-                playerBox.position.y += 5;
-                playerBox.texture = characterTextures.down;
+                playerBox.position.y += 3;
+                playerBox.texture = characterTextures.down[downStepCounter % 6];
                 playerBox.scale.x = 1;
+                downStepCounter++;
             }
             requestAnimationFrame(animate);
         }
