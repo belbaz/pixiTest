@@ -1,6 +1,6 @@
 import React from 'react';
-import PixiComponent from './PixiComponent';
-import './style.css';
+import PixiComponent from './PixiJS/PixiComponent';
+
 function App() {
   return (
       <div className="App">

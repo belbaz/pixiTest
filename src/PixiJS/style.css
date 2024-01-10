@@ -3,18 +3,14 @@
 body {
     margin: auto;
     overflow: hidden;
+    background: black;
 }
 
-.modal {
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 1;
+.pixi-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
 }
 
 /*.sneakers-title {*/
