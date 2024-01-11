@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import * as PIXI from 'pixi.js';
 import gsap from 'gsap'; // Importer GreenSock Animation Platform (GSAP)
 import "./style.css"
+import {autoDetectFormat, autoDetectRenderer} from "pixi.js";
 
 const PixiComponent = () => {
     const pixiContainer = useRef(null);
@@ -27,7 +28,7 @@ const PixiComponent = () => {
         // background.height = renderer.height;
         // sceneContainer.addChild(background);
         const blueBorder = new PIXI.Graphics();
-        blueBorder.lineStyle(15, 0x00005F); // Line style: 5 pixels width, blue color
+        blueBorder.lineStyle(15, 0xe1dbdb); // Line style: 5 pixels width, blue color
         blueBorder.drawRect(0, 0, renderer.width, renderer.height); // Draw a rectangle around the scene
         sceneContainer.addChild(blueBorder);
         // Create the stage
@@ -76,26 +77,27 @@ const PixiComponent = () => {
 
         // Créez la boule
         let ball = new PIXI.Graphics();
-        ball.beginFill(0xFF0000); // Changez la couleur de la boule ici
+        ball.beginFill(0xe1dbdb); // Changez la couleur de la boule ici
         ball.drawCircle(0, 0, 15); // Changez la taille de la boule ici
         ball.endFill();
         ball.position.set(renderer.width / 2, renderer.height / 2.7); // Positionnez la boule au centre de la scène
         stage.addChild(ball);
 
         // Load the texture for the "house"
-        // const houseTexture = PIXI.Texture.from('maison.png');
+        const houseTexture = PIXI.Texture.from('Portal Pixel Art.gif');
         // Create the "house" using the texture
-        // const houseBox = new PIXI.Sprite(houseTexture);
-        // houseBox.anchor.set(0.25); // Centre l'origine du sprite
-        // houseBox.width = 200; // Largeur en pixels
-        // houseBox.height = 139;
-        // houseBox.position.set(renderer.width / 3, renderer.height / 4); // Positionnez le sprite au-dessus du centre de la scène
-        // houseBox.interactive = true; // Rendre la maison interactive
-        // houseBox.on('pointerdown', () => { // Ajouter un écouteur d'événements pour déplacer le personnage vers la maison lorsqu'on clique dessus
-        //     const distance = Math.sqrt(Math.pow(houseBox.position.x - playerBox.position.x, 2) + Math.pow(houseBox.position.y - playerBox.position.y, 2));
-        //     const duration = distance / 100; // Durée de l'animation en secondes, dépend de la distance
-        //     gsap.to(playerBox.position, { x: houseBox.position.x, y: houseBox.position.y - houseBox.height, duration: duration });
-        // });
+        const houseBox = new PIXI.Sprite(houseTexture);
+        houseBox.anchor.set(0.25); // Centre l'origine du sprite
+        houseBox.width = 200; // Largeur en pixels
+        houseBox.height = 139;
+        houseBox.rotation =1.5;
+        houseBox.position.set(renderer.width / 1.9, renderer.height / 3.5); // Positionnez le sprite au-dessus du centre de la scène
+        houseBox.interactive = true; // Rendre la maison interactive
+        houseBox.on('pointerdown', () => { // Ajouter un écouteur d'événements pour déplacer le personnage vers la maison lorsqu'on clique dessus
+            const distance = Math.sqrt(Math.pow(houseBox.position.x - playerBox.position.x, 2) + Math.pow(houseBox.position.y - playerBox.position.y, 2));
+            const duration = distance / 100; // Durée de l'animation en secondes, dépend de la distance
+            gsap.to(playerBox.position, { x: houseBox.position.x, y: houseBox.position.y - houseBox.height, duration: duration });
+        });
         // Create a text for the prompt
         const promptText = new PIXI.Text("Rentrer dans cette maison ?", { fill: 0xffffff });
         promptText.anchor.set(0.5);
@@ -104,7 +106,7 @@ const PixiComponent = () => {
         stage.addChild(promptText);
         // Add boxes to the stage
         stage.addChild(playerBox);
-        // stage.addChild(houseBox);
+        stage.addChild(houseBox);
         animate();
 
         // Ajoutez ces lignes avant vos contrôles de mouvement
@@ -119,7 +121,7 @@ const PixiComponent = () => {
             renderer.render(stage);
             // Check the distance between the player and the house
             const distance = Math.sqrt(Math.pow(houseText.position.x - playerBox.position.x, 2) + Math.pow(houseText.position.y - playerBox.position.y, 2));
-            if (distance < 100) {
+            if (distance < 150) {
                 // If the player is close to the house, show the prompt
                 promptText.visible = true;
                 promptText.position.set(playerBox.position.x, playerBox.position.y - playerBox.height / 2 - promptText.height);
