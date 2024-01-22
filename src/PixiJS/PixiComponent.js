@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import * as PIXI from 'pixi.js';
 import "./style.css"
+import playerImage from "../images/graphics-sprites 2d-game-character.png"
+import maisonImage from "../images/maison.png"
 
 const PixiComponent = () => {
     const pixiContainer = useRef(null);
@@ -24,7 +26,7 @@ const PixiComponent = () => {
         pixiContainer.current.appendChild(renderer.view);
         // Create a container for the scene and the blue border
         const sceneContainer = new PIXI.Container();
-        const maison = new PIXI.Sprite(PIXI.Texture.from('images/maison.png'));
+        const maison = new PIXI.Sprite(PIXI.Texture.from(maisonImage));
         maison.width = 588 / 3;
         maison.height = 678 / 3;
         maison.position.set(renderer.width / 2.9, renderer.height / 3.9); // Positionnez le sprite au centre de la scène
@@ -35,7 +37,7 @@ const PixiComponent = () => {
         sceneContainer.addChild(border);
         // Create the stage
         const stage = new PIXI.Container();
-        let spriteSheet = PIXI.Texture.from('images/graphics-sprites 2d-game-character.png');
+        let spriteSheet = PIXI.Texture.from(playerImage);
         let characterTextures = {
             down: [],
             left: [],
